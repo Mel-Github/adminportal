@@ -8,10 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -51,6 +54,47 @@ public class BookController {
             e.printStackTrace();
         }
         return "redirect:bookList";
+    }
+
+    @RequestMapping("/bookInfo")
+    public String bookInfo(@RequestParam("id") Long id, Model model){
+        Book book = bookService.findOne(id);
+        model.addAttribute("book", book);
+        return "bookInfo";
+
+    }
+
+    @RequestMapping("/updateBook")
+    public String updateBook(@RequestParam("id") Long id, Model model){
+        Book book = bookService.findOne(id);
+        model.addAttribute("book", book);
+        return "updateBook";
+    }
+
+    @RequestMapping(value="/updateBook", method=RequestMethod.POST)
+    public String updateBookPost(@ModelAttribute("book") Book book, HttpServletRequest request){
+        bookService.save(book);
+
+        MultipartFile bookImage = book.getBookImage();
+
+        if(!bookImage.isEmpty()){
+            try{
+                byte[] bytes = bookImage.getBytes();
+                String name = book.getId() + ".png";
+
+                Files.delete(Paths.get("src/main/resources/static/image/book/"+name));
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream(new File("src/main/resources/static/image/book/"+name)));
+                stream.write(bytes);
+                stream.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return "redirect:/book/bookInfo?id="+book.getId();
     }
 
     @RequestMapping("/bookList")
