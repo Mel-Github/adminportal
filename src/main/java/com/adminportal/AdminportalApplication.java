@@ -15,7 +15,7 @@ import java.util.Set;
 
 
 @SpringBootApplication
-public class AdminportalApplication  {
+public class AdminportalApplication implements CommandLineRunner {
 
 	@Autowired
 	private UserService userService;
@@ -24,7 +24,7 @@ public class AdminportalApplication  {
 		SpringApplication.run(AdminportalApplication.class, args);
 	}
 
-	/*@Override
+	@Override
 	public void run(String... args) throws Exception {
 		User user1 = new User();
 		user1.setUsername("admin");
@@ -37,6 +37,6 @@ public class AdminportalApplication  {
 		userRoles.add(new UserRole(user1, role1));
 
 		userService.createUser(user1, userRoles);
-	}*/
+	}
 }
 
