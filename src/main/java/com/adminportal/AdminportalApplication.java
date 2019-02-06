@@ -24,7 +24,7 @@ public class AdminportalApplication implements CommandLineRunner {
 		SpringApplication.run(AdminportalApplication.class, args);
 	}
 
-	@Override
+	/*@Override
 	public void run(String... args) throws Exception {
 		User user1 = new User();
 		user1.setUsername("admin");
@@ -37,6 +37,6 @@ public class AdminportalApplication implements CommandLineRunner {
 		userRoles.add(new UserRole(user1, role1));
 
 		userService.createUser(user1, userRoles);
-	}
+	}*/
 }
 
